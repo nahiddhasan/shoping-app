@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid()) @map("_id")
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid()) @map("_id")
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          ROLE      @default(USER)
+  accounts      Account[]
+  sessions      Session[]
+}
+
+enum ROLE {
+  ADMIN
+  USER
+}
+
+model VerificationToken {
+  identifier String   @id @map("_id")
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Category {
+  id        String    @id @default(cuid()) @map("_id")
+  createdAt DateTime  @default(now())
+  title     String
+  slug      String    @unique
+  products  Product[]
+}
+
+model Product {
+  id           String   @id @default(cuid()) @map("_id")
+  createdAt    DateTime @default(now())
+  title        String
+  desc         String
+  hoverImage   String?
+  displayImage String?
+  images       String[]
+  size         String[]
+  color        String[]
+  price        Float
+  isFeatured   Boolean  @default(false)
+  category     Category @relation(fields: [catSlug], references: [slug])
+  catSlug      String
+}
+
+model Hero {
+  id           String   @id @default(cuid()) @map("_id")
+  createdAt    DateTime @default(now())
+  bg           String
+  productImage String
+  title        String
+  desc         String
+}
