@@ -9,12 +9,12 @@ const sponsors = [
     img: "/img/s1.png",
   },
   {
-    id: 3,
+    id: 2,
     desc: "“2 The most thoughtfully designed sneakers ever.”",
     img: "/img/s2.png",
   },
   {
-    id: 1,
+    id: 3,
     desc: "“3 The most thoughtfully designed sneakers ever The most thoughtfully designed sneakers ever.”",
     img: "/img/s3.png",
   },
