@@ -39,7 +39,7 @@ const Sidebar = () => {
           const { title, path, Icon, img } = item;
           return (
             <Link
-              key={title}
+              key={index}
               href={path}
               onClick={() => setActive(index)}
               className={`flex gap-3 items-center p-2 px-4 rounded-2xl ${

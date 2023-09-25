@@ -48,7 +48,7 @@ const MobileSlider = ({ images }) => {
           >
             {images.map((item, index) => (
               <div
-                key={item}
+                key={index}
                 className={`h-2 w-2 rounded-[100%]  ${
                   currentSlider === index ? "bg-slate-400" : "bg-slate-800"
                 } `}

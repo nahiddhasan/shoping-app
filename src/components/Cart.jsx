@@ -75,9 +75,9 @@ const Cart = ({ quantity }) => {
             <div className="flex-[2] flex flex-col gap-2 overflow-auto">
               {products.length > 0 ? (
                 <>
-                  {products?.map((product) => (
+                  {products?.map((product, index) => (
                     <div
-                      key={product._id}
+                      key={index}
                       className="w-full flex gap-2 justify-between"
                     >
                       <div className="flex-1 relative flex items-center justify-center rounded-2xl overflow-hidden">
