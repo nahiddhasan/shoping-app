@@ -1,9 +1,8 @@
 "use client";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React from "react";
 
-const page = () => {
+const Settings = () => {
   const router = useRouter();
   const handleSignOut = () => {
     signOut();
@@ -20,4 +19,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Settings;

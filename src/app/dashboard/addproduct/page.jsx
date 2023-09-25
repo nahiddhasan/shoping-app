@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 
 const storage = getStorage(app);
 
-const page = () => {
+const AddProduct = () => {
   const [inputs, setInputs] = useState({
     title: "",
     desc: "",
@@ -412,4 +412,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AddProduct;

@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 const storage = getStorage(app);
 
-const page = () => {
+const Hero = () => {
   const [bg, setBg] = useState();
   const [productImg, setProductImg] = useState();
   const [title, setTitle] = useState();
@@ -293,4 +293,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Hero;
