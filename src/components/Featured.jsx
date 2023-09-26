@@ -1,54 +1,62 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const FeaturedProduct = [
-  {
-    id: 1,
-    img: "/img/p1-1.jpg",
-    hoverImg: "/img/p1.jpg",
-    model: "Model 0001: Black",
-    price: 145,
-    topText: "Selling fast",
-  },
-  {
-    id: 2,
-    img: "/img/p-2.jpg",
-    hoverImg: "/img/p-22.jpg",
-    model: "Model 0001: Black",
-    price: 145,
-  },
-  {
-    id: 3,
-    img: "/img/p-3.jpg",
-    hoverImg: "/img/p-33.jpg",
-    model: "Model 0001: Black",
-    price: 145,
-  },
-  {
-    id: 4,
-    img: "/img/p-4a.jpg",
-    hoverImg: "/img/p-4.jpg",
-    model: "Model 0001: Black",
-    price: 145,
-  },
-  {
-    id: 5,
-    img: "/img/p-15.jpg",
-    hoverImg: "/img/p-5a.jpg",
-    model: "Model 0001: Black",
-    price: 145,
-  },
-  {
-    id: 6,
-    img: "/img/p-6.jpg",
-    hoverImg: "/img/p-6a.jpg",
-    model: "Model 0001: Black",
-    topText: "Top Selling",
-    price: 145,
-  },
-];
+// const FeaturedProduct = [
+//   {
+//     id: 1,
+//     img: "/img/p1-1.jpg",
+//     hoverImg: "/img/p1.jpg",
+//     model: "Model 0001: Black",
+//     price: 145,
+//     topText: "Selling fast",
+//   },
+//   {
+//     id: 2,
+//     img: "/img/p-2.jpg",
+//     hoverImg: "/img/p-22.jpg",
+//     model: "Model 0001: Black",
+//     price: 145,
+//   },
+//   {
+//     id: 3,
+//     img: "/img/p-3.jpg",
+//     hoverImg: "/img/p-33.jpg",
+//     model: "Model 0001: Black",
+//     price: 145,
+//   },
+//   {
+//     id: 4,
+//     img: "/img/p-4a.jpg",
+//     hoverImg: "/img/p-4.jpg",
+//     model: "Model 0001: Black",
+//     price: 145,
+//   },
+//   {
+//     id: 5,
+//     img: "/img/p-15.jpg",
+//     hoverImg: "/img/p-5a.jpg",
+//     model: "Model 0001: Black",
+//     price: 145,
+//   },
+//   {
+//     id: 6,
+//     img: "/img/p-6.jpg",
+//     hoverImg: "/img/p-6a.jpg",
+//     model: "Model 0001: Black",
+//     topText: "Top Selling",
+//     price: 145,
+//   },
+// ];
 
-const Featured = () => {
+const getData = async () => {
+  const res = await fetch("http://localhost:3000/api/product", {
+    cache: "no-store",
+  });
+  return res.json();
+};
+
+const Featured = async () => {
+  const FeaturedProduct = await getData();
   return (
     <div className=" w-full my-6 lg:my-12 flex items-center">
       {/* main container */}
@@ -72,11 +80,16 @@ const Featured = () => {
               >
                 {/* Image container */}
                 <div className="relative h-full w-full group-hover/img:hidden">
-                  <Image src={item.img} fill alt="" className="object-cover" />
+                  <Image
+                    src={item.displayImage}
+                    fill
+                    alt=""
+                    className="object-cover"
+                  />
                 </div>
                 <div className="invisible opacity-0 group-hover/img:visible group-hover/img:opacity-100 duration-300 transition-all relative h-full w-full">
                   <Image
-                    src={item.hoverImg}
+                    src={item.hoverImage}
                     fill
                     alt=""
                     className="object-cover"
@@ -84,16 +97,16 @@ const Featured = () => {
                 </div>
                 {/* info container */}
                 <div className="h-full w-full absolute flex justify-between flex-col top-0 p-4">
-                  {item.topText ? (
+                  {item.status ? (
                     <span className=" p-1 px-3 bg-white rounded-full w-max text-xs md:text-sm">
-                      {item.topText}
+                      {item.status}
                     </span>
                   ) : (
                     <span></span>
                   )}
                   {/* product info */}
                   <div className="flex items-center justify-between group-hover/img:text-white">
-                    <span className="text-sm md:text-base">{item.model}</span>
+                    <span className="text-sm md:text-base">{item.title}</span>
                     <span className="text-gray-600 group-hover/img:text-white">
                       ${item.price}
                     </span>

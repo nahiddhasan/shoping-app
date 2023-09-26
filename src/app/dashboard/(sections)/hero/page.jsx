@@ -24,6 +24,7 @@ const Hero = () => {
   const [bgUrl, setBgUrl] = useState();
   const [productUrl, setProductUrl] = useState();
   const [progress, setProgress] = useState();
+  
   const { isLoading, error, data } = useQuery({
     queryKey: ["hero"],
     queryFn: () =>

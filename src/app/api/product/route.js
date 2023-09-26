@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../utils/connect";
 
 
-export const PUT =async(NextRequest)=> {
+export const POST =async(NextRequest)=> {
 
     try {
         const body = await NextRequest.json();

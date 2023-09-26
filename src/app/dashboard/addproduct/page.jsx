@@ -20,6 +20,7 @@ const AddProduct = () => {
     title: "",
     desc: "",
     catSlug: "",
+    status: "",
   });
   const [price, setPrice] = useState(0);
   const [color, setColor] = useState([]);
@@ -251,13 +252,24 @@ const AddProduct = () => {
           />
         </div>
         <div className="w-[40%] gap-2 flex items-center">
-          <label>Category</label>
+          <label>Category:</label>
           <input
             type="text"
             required
             placeholder="Product Category"
             className={styles.addProductInput}
             name="catSlug"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="w-[40%] gap-2 flex items-center">
+          <label>Status:</label>
+          <input
+            type="text"
+            required
+            placeholder="New Arrival"
+            className={styles.addProductInput}
+            name="status"
             onChange={handleChange}
           />
         </div>
@@ -286,8 +298,9 @@ const AddProduct = () => {
             />
 
             <div className="flex gap-4 items-center">
-              {images.map((url) => (
+              {images.map((url, index) => (
                 <div
+                  key={index}
                   onClick={() =>
                     setImages((prev) => prev.filter((item) => item !== url))
                   }

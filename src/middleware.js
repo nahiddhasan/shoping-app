@@ -1,6 +1,5 @@
 import { withAuth } from "next-auth/middleware";
 
-// More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
 export default withAuth({
   callbacks: {
     
@@ -23,11 +22,7 @@ export default withAuth({
         return true;
       }
       return false
-      //checking path and authorization
-      // if ( req.nextUrl.pathname.startsWith("/dashboard")) {
-      //   return token?.role === "ADMIN"
-      // }
-      // return !!token
+
     },
    
   },

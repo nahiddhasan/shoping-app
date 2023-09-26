@@ -83,6 +83,7 @@ model Product {
   isFeatured   Boolean  @default(false)
   category     Category @relation(fields: [catSlug], references: [slug])
   catSlug      String
+  status       String?
 }
 
 model Hero {
