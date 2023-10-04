@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
                 <div>
                   {children}
                   <ToastContainer
-                    position="top-right"
+                    position="top-center"
                     autoClose={3000}
                     closeOnClick
                     theme="dark"

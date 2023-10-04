@@ -65,7 +65,9 @@ const MobileMenu = ({ session, signOut }) => {
 
           <div className="flex flex-col gap-2">
             <span className="text-sm">Account</span>
-            <h2 className="text-2xl">My Orders</h2>
+            <Link href="/orders" className="text-2xl">
+              My Orders
+            </Link>
             {session.status === "authenticated" ? (
               <h2 className="text-2xl" onClick={() => signOut()}>
                 Logout

@@ -14,10 +14,10 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="h-[300px] w-[500px] ring-1 ring-rose-600 flex items-center justify-center rounded-lg ">
+    <div className="flex items-center justify-center h-screen bg-slate-900">
+      <div className="h-[300px] w-[500px] ring-1 bg-slate-800 flex items-center justify-center rounded-lg shadow-lg">
         <h1
-          className=" p-2 px4 ring-1 ring-orange-400 rounded-md cursor-pointer"
+          className=" p-2 px4 ring-1 text-white ring-orange-400 rounded-md cursor-pointer"
           onClick={() => signIn("google")}
         >
           Login with google

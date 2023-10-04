@@ -1,11 +1,16 @@
 "use client";
 import { addQuantity, decQuantity, removeItem } from "@/redux/cartRedux";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-const Cart = ({ quantity }) => {
+const Cart = () => {
+  const session = useSession();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const { products } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
@@ -16,6 +21,32 @@ const Cart = ({ quantity }) => {
       total += item.quantity * item.price;
     });
     return total.toFixed(2);
+  };
+  const total = totalPrice();
+  const handleCheckout = async () => {
+    if (session.status === "unauthenticated") {
+      router.push("/login");
+    }
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            products,
+            price: parseFloat(total),
+            userEmail: session.data.user.email,
+            status: "Not paid",
+            intent_id: "",
+          }),
+        }
+      );
+      const data = await res.json();
+      router.push(`/payment/${data.id}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -139,7 +170,15 @@ const Cart = ({ quantity }) => {
                   ))}
                 </>
               ) : (
-                "No products available in your cart"
+                <div className="flex gap-4 flex-col ">
+                  <span>No products available in your cart</span>
+                  <Link
+                    className="bg-black text-white rounded-full p-2 px-4 w-max"
+                    href="/"
+                  >
+                    Shop Now
+                  </Link>
+                </div>
               )}
             </div>
             <hr className="my-4" />
@@ -147,7 +186,7 @@ const Cart = ({ quantity }) => {
             <div className="flex-[1] flex flex-col gap-4 ">
               <div className="flex items-center justify-between font-semibold">
                 <span>Subtotal</span>
-                <span>${totalPrice()}</span>
+                <span>${total}</span>
               </div>
               {/* input container */}
               <div className="flex w-full items-center justify-between gap-4">
@@ -158,7 +197,10 @@ const Cart = ({ quantity }) => {
                 />
                 <span className="cursor-pointer">Apply Discount</span>
               </div>
-              <button className="p-2 bg-black text-white rounded-full">
+              <button
+                className="p-2 bg-black text-white rounded-full"
+                onClick={handleCheckout}
+              >
                 Continue to Checkout
               </button>
             </div>

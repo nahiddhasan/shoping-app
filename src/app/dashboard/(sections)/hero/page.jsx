@@ -8,13 +8,15 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 const storage = getStorage(app);
 
 const Hero = () => {
+  const router = useRouter();
   const [bg, setBg] = useState();
   const [productImg, setProductImg] = useState();
   const [title, setTitle] = useState();
@@ -24,18 +26,20 @@ const Hero = () => {
   const [bgUrl, setBgUrl] = useState();
   const [productUrl, setProductUrl] = useState();
   const [progress, setProgress] = useState();
-  
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["hero"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/hero").then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/hero`).then((res) =>
+        res.json()
+      ),
   });
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: ({ bgUrl, productUrl, title, desc }) => {
-      return fetch(`http://localhost:3000/api/hero`, {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/hero`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -53,143 +57,87 @@ const Hero = () => {
     },
   });
 
-  // //handle bg image
-  // const handleBg = (file) => {
-  //   const name = new Date().getTime() + file.name;
-  //   const storageRef = ref(storage, name);
+  useEffect(() => {
+    //handle bg image
+    if (bg) {
+      const handleBg = (file) => {
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
 
-  //   const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const progress =
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       setProgress(progress);
-  //       switch (snapshot.state) {
-  //         case "paused":
-  //           console.log("Upload is paused");
-  //           break;
-  //         case "running":
-  //           console.log("Upload is running");
-  //           break;
-  //       }
-  //     },
-  //     (error) => {},
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         setBgUrl(downloadURL);
-  //       });
-  //     }
-  //   );
-  // };
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progress);
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setBgUrl(downloadURL);
+            });
+          }
+        );
+      };
+      handleBg(bg);
+    }
+    //handle product image
+    if (productImg) {
+      //handle product image
+      const handleProductImg = (file) => {
+        const name = new Date().getTime() + file.name;
+        const storageRef = ref(storage, name);
 
-  // //handle product image
-  // const handleProductImg = (file) => {
-  //   const name = new Date().getTime() + file.name;
-  //   const storageRef = ref(storage, name);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
-  //   const uploadTask = uploadBytesResumable(storageRef, file);
-
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const progress =
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       setProgress(progress);
-  //       switch (snapshot.state) {
-  //         case "paused":
-  //           console.log("Upload is paused");
-  //           break;
-  //         case "running":
-  //           console.log("Upload is running");
-  //           break;
-  //       }
-  //     },
-  //     (error) => {},
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         setProductUrl(downloadURL);
-  //       });
-  //     }
-  //   );
-  // };
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progress);
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {},
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setProductUrl(downloadURL);
+            });
+          }
+        );
+      };
+      handleProductImg(productImg);
+    }
+  }, [bg, productImg]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    if (bg) {
-      setUploading(true);
-      const name = new Date().getTime() + bg.name;
-      const storageRef = ref(storage, `/hero/${name}`);
-
-      const uploadTask = uploadBytesResumable(storageRef, bg);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(progress);
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setBgUrl(downloadURL);
-            setUploading(false);
-          });
-        }
-      );
-    }
-
-    if (productImg) {
-      setUploading(true);
-      const name = new Date().getTime() + productImg.name;
-      const storageRef = ref(storage, `/hero/${name}`);
-
-      const uploadTask = uploadBytesResumable(storageRef, productImg);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(progress);
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {},
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setProductUrl(downloadURL);
-            setUploading(false);
-          });
-        }
-      );
-    }
-
     mutation.mutate({ bgUrl, productUrl, title, desc });
     toast.success("Update succesfull!");
+    router.push("/");
   };
 
   if (isLoading) return "Loading...";
 
-  console.log(progress);
   return (
-    <div className=" w-full my-4 flex items-center">
+    <div className=" w-full h-full  flex items-center mx-auto">
       {/* main Container  */}
       <div className="px-4 w-[1400px] mx-auto flex items-center justify-center ">
         <div
@@ -271,14 +219,15 @@ const Hero = () => {
                 </h1>
                 <input
                   type="text"
-                  className="w-44"
+                  className="w-44 bg-transparent ring-1 ring-slate-400 text-black px-2 p-1 rounded-md"
                   placeholder={data[0].title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
+
                 <span className="text-sm text-black">{data[0].desc}</span>
                 <input
                   type="text"
-                  className="w-44"
+                  className="w-44 bg-transparent ring-1 ring-slate-400 text-black px-2 p-1 rounded-md"
                   placeholder={data[0].desc}
                   onChange={(e) => setDesc(e.target.value)}
                 />

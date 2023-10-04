@@ -96,7 +96,7 @@ const Navbar = () => {
             {/* profile hover item */}
 
             <div className="invisible opacity-0 group-hover/profile:visible group-hover/profile:opacity-100 transition-all duration-500  w-max flex gap-2 bg-white ring-1 ring-gray-400 p-4 rounded-md flex-col absolute top-12 right-0">
-              <Link className="hover:underline" href="/">
+              <Link className="hover:underline" href="/orders">
                 My Orders
               </Link>
               <Link className="hover:underline" href="/">

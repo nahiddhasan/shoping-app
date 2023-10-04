@@ -1,62 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// const FeaturedProduct = [
-//   {
-//     id: 1,
-//     img: "/img/p1-1.jpg",
-//     hoverImg: "/img/p1.jpg",
-//     model: "Model 0001: Black",
-//     price: 145,
-//     topText: "Selling fast",
-//   },
-//   {
-//     id: 2,
-//     img: "/img/p-2.jpg",
-//     hoverImg: "/img/p-22.jpg",
-//     model: "Model 0001: Black",
-//     price: 145,
-//   },
-//   {
-//     id: 3,
-//     img: "/img/p-3.jpg",
-//     hoverImg: "/img/p-33.jpg",
-//     model: "Model 0001: Black",
-//     price: 145,
-//   },
-//   {
-//     id: 4,
-//     img: "/img/p-4a.jpg",
-//     hoverImg: "/img/p-4.jpg",
-//     model: "Model 0001: Black",
-//     price: 145,
-//   },
-//   {
-//     id: 5,
-//     img: "/img/p-15.jpg",
-//     hoverImg: "/img/p-5a.jpg",
-//     model: "Model 0001: Black",
-//     price: 145,
-//   },
-//   {
-//     id: 6,
-//     img: "/img/p-6.jpg",
-//     hoverImg: "/img/p-6a.jpg",
-//     model: "Model 0001: Black",
-//     topText: "Top Selling",
-//     price: 145,
-//   },
-// ];
-
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/product", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product`, {
     cache: "no-store",
   });
+  if (!res.ok) {
+    return "Something went wrong";
+  }
   return res.json();
 };
 
 const Featured = async () => {
   const FeaturedProduct = await getData();
+
   return (
     <div className=" w-full my-6 lg:my-12 flex items-center">
       {/* main container */}

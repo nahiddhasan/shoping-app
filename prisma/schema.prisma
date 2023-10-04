@@ -46,6 +46,7 @@ model User {
   role          ROLE      @default(USER)
   accounts      Account[]
   sessions      Session[]
+  order         Order[]
 }
 
 enum ROLE {
@@ -84,6 +85,17 @@ model Product {
   category     Category @relation(fields: [catSlug], references: [slug])
   catSlug      String
   status       String?
+}
+
+model Order {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  products  Json[]
+  price     Float
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String
+  status    String
+  intent_id String?  @unique
 }
 
 model Hero {

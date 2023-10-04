@@ -162,19 +162,22 @@ const AddProduct = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/product", {
-        method: "POST",
-        body: JSON.stringify({
-          ...inputs,
-          price: parseFloat(price),
-          color,
-          size,
-          isFeatured,
-          displayImage: displayUrl,
-          hoverImage: hoverUrl,
-          images: imgUrl,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/product`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            ...inputs,
+            price: parseFloat(price),
+            color,
+            size,
+            isFeatured,
+            displayImage: displayUrl,
+            hoverImage: hoverUrl,
+            images: imgUrl,
+          }),
+        }
+      );
 
       const data = await res.json();
       toast.success("Product added succesfully");

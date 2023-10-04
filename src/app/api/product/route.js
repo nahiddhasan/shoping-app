@@ -1,4 +1,3 @@
-import { getAuthSession } from "@/utils/auth";
 import { NextResponse } from "next/server";
 import prisma from "../../../utils/connect";
 
@@ -16,23 +15,26 @@ export const POST =async(NextRequest)=> {
     }
 }
 
-export const GET = async()=> {
+export const GET = async(req)=> {
 
-    const session = await getAuthSession();
     
     try {
 
-        if(session?.user?.role === "ADMIN"){
-            const products = await prisma.Product.findMany();
+        // if(session.user.role === "ADMIN"){
+        //     const products = await prisma.Product.findMany();
             
-            return new NextResponse(JSON.stringify(products,{status:200}))
-        }
+        //     return new NextResponse(JSON.stringify(products,{status:200}))
+        // }
             
         const products = await prisma.Product.findMany({
-             where:{
+            take:6,
+            where:{
                     ...({ isFeatured: true }),
-                }
-            });
+                },
+            orderBy: {
+                    createdAt: 'desc',
+                },
+            })
             
             return new NextResponse(JSON.stringify(products,{status:200}))
         
