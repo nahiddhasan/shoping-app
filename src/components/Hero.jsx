@@ -15,7 +15,7 @@ const Hero = async () => {
       {/* main Container  */}
       <div className="px-4 lg:px-8 w-[1400px] mx-auto flex items-center justify-center ">
         <div
-          style={{ backgroundImage: `url(${data[0].bg})` }}
+          style={{ backgroundImage: `url(${data[0]?.bg})` }}
           className="w-full p-10 bg-[#f2f2f2]  bg-center bg-cover bg-no-repeat rounded-2xl flex items-center justify-center "
         >
           {/* main container */}
@@ -24,7 +24,7 @@ const Hero = async () => {
             <div className="relative w-[250px] h-[300px] lg:w-[400px] lg:h-[350px]">
               <Image
                 className="object-contain"
-                src={data[0].productImage}
+                src={data[0]?.productImage}
                 fill
                 alt="hero_img"
               />
@@ -38,7 +38,7 @@ const Hero = async () => {
                 <h1 className="text-[32px] md:text-[48px] lg:text-[68px] text-center">
                   {data[0].title}
                 </h1>
-                <span className="text-sm">{data[0].desc}</span>
+                <span className="text-sm">{data[0]?.desc}</span>
               </div>
               <button className="w-max px-8 p-4 bg-black text-white rounded-full">
                 Shop Now
