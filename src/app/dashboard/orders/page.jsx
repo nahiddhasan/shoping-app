@@ -1,22 +1,23 @@
-import { headers } from "next/headers";
+"use client";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const getData = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`, {
-    method: "GET",
-    headers: headers(),
-    cache: "no-store",
+const Orders = () => {
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`).then((res) =>
+        res.json()
+      ),
   });
-  if (!res.ok) {
-    return "Something went wrong";
-  }
-  return res.json();
-};
 
-const Orders = async () => {
-  const orders = await getData();
+  if (isLoading) {
+    return "loading...";
+  }
+
+  const orders = data;
   return (
     <>
       <div className="p-4">

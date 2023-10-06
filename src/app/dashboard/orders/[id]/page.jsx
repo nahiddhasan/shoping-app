@@ -39,8 +39,8 @@ const UpdateOrder = ({ params }) => {
 
   const handleUpdate = () => {
     mutation.mutate({ status });
-    router.push("/dashboard/orders");
     toast.success("Update succesfull!");
+    router.push(`/dashboard/orders`);
   };
   if (isLoading) {
     return "loading...";

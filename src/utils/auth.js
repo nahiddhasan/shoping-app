@@ -11,13 +11,15 @@ export const authOptions = {
     providers: [
       GoogleProvider({
         // clientId: process.env.GOOGLE_ID,
-        clientId: "829366865983-mbpa2vovh1p4n0ad9kglldovk1dm8dru.apps.googleusercontent.com",
-        clientSecret: "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",
         // clientSecret: process.env.GOOGLE_SECRET,
+        clientId: "829366865983-n1c1aik5adgfde6eie3d5ki7l0ntsgmm.apps.googleusercontent.com",
+        clientSecret: "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",
         
       }),
+        
     ],
     callbacks: {
+      
       async session({ token, session }) {
         if (token) {
           session.user.role = token.role;
@@ -34,6 +36,7 @@ export const authOptions = {
         return token;
       },
     },
+    
     pages: {
       signIn: "/login",
       error:"/login"

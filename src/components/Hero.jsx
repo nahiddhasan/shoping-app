@@ -10,7 +10,6 @@ const getData = async () => {
 };
 const Hero = async () => {
   const data = await getData();
-  console.log(data);
   return (
     <div className=" w-full my-12 flex items-center">
       {/* main Container  */}

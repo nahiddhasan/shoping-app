@@ -1,4 +1,7 @@
 "use client";
+import styles from "@/app/style";
+import { app } from "@/utils/firebase";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getDownloadURL,
   getStorage,
@@ -7,40 +10,56 @@ import {
 } from "firebase/storage";
 import Image from "next/image";
 import { useState } from "react";
-import { app } from "../../../utils/firebase";
-import styles from "../../style";
 
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify";
 
 const storage = getStorage(app);
 
-const AddProduct = () => {
-  const [inputs, setInputs] = useState({
-    title: "",
-    desc: "",
-    catSlug: "",
-    status: "",
+const UpdateProduct = ({ params }) => {
+  const { id } = params;
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["updateProduct"],
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${id}`).then(
+        (res) => res.json()
+      ),
   });
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (product) => {
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["updateProduct"] });
+    },
+  });
+
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [catSlug, setCatSlug] = useState("");
+  const [status, setStatus] = useState("");
   const [price, setPrice] = useState(0);
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
   const [images, setImages] = useState([]);
   const [isFeatured, setIsFeatured] = useState(false);
-  const [display, setDisplay] = useState();
-  const [hover, setHover] = useState(null);
+  const [display, setDisplay] = useState("");
+  const [hover, setHover] = useState("");
 
-  const [displayUrl, setDisplayUrl] = useState();
-  const [hoverUrl, setHoverUrl] = useState(null);
+  const [displayUrl, setDisplayUrl] = useState("");
+  const [hoverUrl, setHoverUrl] = useState("");
   const [imgUrl, setImgUrl] = useState([]);
 
   const [progress, setProgress] = useState(0);
-
-  const handleChange = (e) => {
-    setInputs((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
 
   const handleColor = (e) => {
     setColor(e.target.value.split(","));
@@ -160,36 +179,29 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/product`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            ...inputs,
-            price: parseFloat(price),
-            color,
-            size,
-            isFeatured,
-            displayImage: displayUrl,
-            hoverImage: hoverUrl,
-            images: imgUrl,
-          }),
-        }
-      );
-
-      const data = await res.json();
-      toast.success("Product added succesfully");
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    mutation.mutate({
+      title,
+      desc,
+      catSlug,
+      status,
+      price: parseFloat(price),
+      color,
+      size,
+      isFeatured,
+      displayImage: displayUrl,
+      hoverImage: hoverUrl,
+      images: imgUrl,
+    });
+    toast.success("Update succesfull!");
   };
+
+  if (isLoading) {
+    return "loading...";
+  }
 
   return (
     <div className="p-4 py-8">
-      <h1 className="text-3xl font-bold">Add Product</h1>
+      <h1 className="text-3xl font-bold">Update Product</h1>
 
       <div className={`my-2 h-2 w-[85%] ring-1 ring-neutral-400 rounded-md`}>
         <div
@@ -198,38 +210,30 @@ const AddProduct = () => {
         />
       </div>
 
-      <form
-        className="flex items-center flex-wrap gap-6 py-6 w-full"
-        onSubmit={handleSubmit}
-      >
+      <form className="flex items-center flex-wrap gap-6 py-6 w-full">
         <div className="w-[40%] gap-2 flex items-center">
           <label>Title:</label>
           <input
             type="text"
-            required
-            placeholder="Product Title"
+            placeholder={data.title}
             className={styles.addProductInput}
-            name="title"
-            onChange={handleChange}
+            onChange={(e) => setTitle(setTitle(e.target.value))}
           />
         </div>
         <div className="w-[40%] gap-2 flex items-center">
           <label>Desc:</label>
           <input
             type="text"
-            required
-            placeholder="Product Desc"
+            placeholder={data.desc}
             className={styles.addProductInput}
-            name="desc"
-            onChange={handleChange}
+            onChange={(e) => setDesc(e.target.value)}
           />
         </div>
         <div className="w-[40%] gap-2 flex items-center">
           <label>Color:</label>
           <input
             type="text"
-            required
-            placeholder="Product Color seperare with comma"
+            placeholder={data.color && data.color.map((i) => i)}
             className={styles.addProductInput}
             onChange={handleColor}
           />
@@ -238,8 +242,7 @@ const AddProduct = () => {
           <label>Size:</label>
           <input
             type="text"
-            required
-            placeholder="Product Size seperate with comma"
+            placeholder={data.size && data.size.map((i) => i)}
             className={styles.addProductInput}
             onChange={handleSize}
           />
@@ -248,8 +251,7 @@ const AddProduct = () => {
           <label>Price:</label>
           <input
             type="number"
-            required
-            placeholder="Product Price"
+            placeholder={data.price}
             className={styles.addProductInput}
             onChange={(e) => setPrice(e.target.value)}
           />
@@ -258,25 +260,34 @@ const AddProduct = () => {
           <label>Category:</label>
           <input
             type="text"
-            required
-            placeholder="Product Category"
+            placeholder={data.catSlug}
             className={styles.addProductInput}
-            name="catSlug"
-            onChange={handleChange}
+            onChange={(e) => setCatSlug(e.target.value)}
           />
         </div>
         <div className="w-[40%] gap-2 flex items-center">
           <label>Status:</label>
           <input
             type="text"
-            placeholder="New Arrival"
+            placeholder={data.status}
             className={styles.addProductInput}
-            name="status"
-            onChange={handleChange}
+            onChange={(e) => setStatus(e.target.value)}
           />
         </div>
         <div className="w-full gap-2 flex items-center">
           <span>Product Images:</span>
+          {data.images &&
+            data.images.map((img, i) => (
+              <div key={i}>
+                <Image
+                  src={img}
+                  height={100}
+                  width={100}
+                  alt="images"
+                  className="object-cover rounded-md"
+                />
+              </div>
+            ))}
           <div className="flex gap-4 items-center">
             <label htmlFor="images">
               <div className="relative rounded-md ring-1 ring-neutral-400">
@@ -288,7 +299,6 @@ const AddProduct = () => {
 
             <input
               type="file"
-              required
               id="images"
               multiple
               className="hidden"
@@ -349,7 +359,15 @@ const AddProduct = () => {
                   <AiOutlineCloudUpload className="cursor-pointer text-4xl " />
                 </div>
               </label>
-
+              <div>
+                <Image
+                  src={data.displayImage}
+                  alt=""
+                  height={100}
+                  width={100}
+                  className="object-cover rounded-md"
+                />
+              </div>
               <div className="flex items-center gap-4 rounded-md overflow-hidden">
                 {display && (
                   <Image
@@ -387,6 +405,15 @@ const AddProduct = () => {
                   <AiOutlineCloudUpload className="cursor-pointer text-4xl " />
                 </div>
               </label>
+              <div>
+                <Image
+                  src={data.hoverImage}
+                  alt=""
+                  height={100}
+                  width={100}
+                  className="object-cover rounded-md"
+                />
+              </div>
               <div className="flex items-center gap-4 overflow-hidden">
                 {hover && (
                   <Image
@@ -419,12 +446,15 @@ const AddProduct = () => {
             </div>
           </div>
         )}
-        <button type="submit" className="bg-green-600 p-2 px-4 rounded-lg">
-          Add Product
+        <button
+          onClick={handleSubmit}
+          className="bg-green-600 p-2 px-4 rounded-lg"
+        >
+          Update Product
         </button>
       </form>
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;
