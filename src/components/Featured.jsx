@@ -1,11 +1,8 @@
-import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
 const getData = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/product`, {
-    method: "GET",
-    headers: headers(),
     cache: "no-store",
   });
   if (!res.ok) {
