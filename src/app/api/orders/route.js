@@ -30,6 +30,7 @@ export const POST = async (NextRequest) => {
 //Fetching Orders
 export const GET = async (req) => {
   const session = await getAuthSession();
+  console.log(session)
   if (session) {
     try {
       if (session.user.role === "ADMIN") {

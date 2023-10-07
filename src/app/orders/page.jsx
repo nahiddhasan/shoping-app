@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
-
 const OrdersPage = () => {
   const session = useSession();
   const { isLoading, error, data } = useQuery({
@@ -27,7 +26,7 @@ const OrdersPage = () => {
     },
   });
 
-  if (isLoading) {
+  if (isLoading || session.status === "loading") {
     return "loading...";
   }
   if (session.status === "unauthenticated") {
@@ -58,7 +57,7 @@ const OrdersPage = () => {
           </thead>
 
           <tbody>
-            {orders?.map((order) => (
+            {orders.map((order) => (
               <tr key={order.id} className="text-sm lg:text-base bg-red-50 ">
                 <td className="hidden md:block p-2]">{order.id}</td>
                 <td className="p-2 ">

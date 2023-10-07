@@ -43,11 +43,11 @@ const UpdateProduct = ({ params }) => {
     },
   });
 
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [catSlug, setCatSlug] = useState("");
-  const [status, setStatus] = useState("");
-  const [price, setPrice] = useState(0);
+  const [title, setTitle] = useState();
+  const [desc, setDesc] = useState();
+  const [catSlug, setCatSlug] = useState();
+  const [status, setStatus] = useState();
+  const [price, setPrice] = useState();
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
   const [images, setImages] = useState([]);
@@ -55,8 +55,8 @@ const UpdateProduct = ({ params }) => {
   const [display, setDisplay] = useState("");
   const [hover, setHover] = useState("");
 
-  const [displayUrl, setDisplayUrl] = useState("");
-  const [hoverUrl, setHoverUrl] = useState("");
+  const [displayUrl, setDisplayUrl] = useState();
+  const [hoverUrl, setHoverUrl] = useState();
   const [imgUrl, setImgUrl] = useState([]);
 
   const [progress, setProgress] = useState(0);
@@ -210,7 +210,7 @@ const UpdateProduct = ({ params }) => {
         />
       </div>
 
-      <form className="flex items-center flex-wrap gap-6 py-6 w-full">
+      <div className="flex items-center flex-wrap gap-6 py-6 w-full">
         <div className="w-[40%] gap-2 flex items-center">
           <label>Title:</label>
           <input
@@ -452,7 +452,7 @@ const UpdateProduct = ({ params }) => {
         >
           Update Product
         </button>
-      </form>
+      </div>
     </div>
   );
 };
