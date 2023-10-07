@@ -47,7 +47,7 @@ export const GET = async (req) => {
     } catch (error) {
       return new NextResponse(
         JSON.stringify(
-          { message: `something went wrong ${error}` },
+          { message: `something went wrong in prisma${error}` },
           { status: 501 }
         )
       );
