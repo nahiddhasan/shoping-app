@@ -1,11 +1,14 @@
 "use client";
+import Loader from "@/components/Loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 const OrdersPage = () => {
   const session = useSession();
+  const [modal, setModal] = useState(false);
   const { isLoading, error, data } = useQuery({
     queryKey: ["orders"],
     queryFn: () =>
@@ -27,7 +30,7 @@ const OrdersPage = () => {
   });
 
   if (isLoading || session.status === "loading") {
-    return "loading...";
+    return <Loader />;
   }
   if (session.status === "unauthenticated") {
     return (
@@ -81,12 +84,33 @@ const OrdersPage = () => {
                           Pay Now
                         </Link>
                         <MdDelete
-                          onClick={() => handleDelete(order.id)}
+                          onClick={() => setModal(true)}
                           className="text-lg text-rose-500 cursor-pointer"
                         />
                       </>
                     )}
                   </div>
+                  {modal && (
+                    <div
+                      onClick={() => setModal(false)}
+                      className="fixed  flex items-center justify-center h-screen w-screen bg-black/20 top-0 left-0"
+                    >
+                      <div className="w-[300px] h-[150px] bg-white rounded-md flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => setModal(false)}
+                          className="bg-red-500 hover:bg-red-400 px-4 py-1 text-white rounded-md"
+                        >
+                          No
+                        </button>
+                        <button
+                          onClick={() => handleDelete(order.id)}
+                          className="bg-green-500 hover:bg-green-400 px-4 py-1 text-white rounded-md"
+                        >
+                          Yes
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}

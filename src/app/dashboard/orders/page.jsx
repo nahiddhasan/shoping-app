@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
@@ -14,7 +15,7 @@ const Orders = () => {
   });
 
   if (isLoading) {
-    return "loading...";
+    return <Loader />;
   }
 
   const orders = data;

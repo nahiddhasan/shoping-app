@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import MobileSlider from "@/components/MobileSlider";
 import ProductFeature from "@/components/ProductFeatures";
 import { addProduct } from "@/redux/cartRedux";
@@ -47,11 +48,7 @@ const SingleProduct = ({ params }) => {
   };
 
   if (isLoading) {
-    return (
-      <span className="w-screen h-screen flex items-center justify-center z-10">
-        Loading...
-      </span>
-    );
+    return <Loader />;
   }
 
   return (

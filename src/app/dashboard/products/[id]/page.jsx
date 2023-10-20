@@ -1,5 +1,6 @@
 "use client";
 import styles from "@/app/style";
+import Loader from "@/components/Loader";
 import { app } from "@/utils/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -196,7 +197,7 @@ const UpdateProduct = ({ params }) => {
   };
 
   if (isLoading) {
-    return "loading...";
+    return <Loader />;
   }
 
   return (

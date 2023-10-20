@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +16,7 @@ const Products = () => {
   });
 
   if (isLoading) {
-    return "loading...";
+    return <Loader />;
   }
 
   const products = data;

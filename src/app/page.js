@@ -15,7 +15,6 @@ export default function Home() {
     <main >
       <Notifications/>
       <Navbar/>
-
       <Hero/>
       <Sponsor />
       <Featured />
@@ -24,7 +23,6 @@ export default function Home() {
       <FeaturedBottom/>
       <Accesories/>
       <Showcase/>
-
       <Footer/>
    
     </main>

@@ -1,5 +1,6 @@
 "use client";
 import styles from "@/app/style";
+import Loader from "@/components/Loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -43,7 +44,7 @@ const UpdateOrder = ({ params }) => {
     router.push(`/dashboard/orders`);
   };
   if (isLoading) {
-    return "loading...";
+    return <Loader />;
   }
   return (
     <div className="p-6 ">

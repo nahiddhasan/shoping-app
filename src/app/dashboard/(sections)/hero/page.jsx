@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/Loader";
 import { app } from "@/utils/firebase";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -134,7 +135,9 @@ const Hero = () => {
     router.push("/");
   };
 
-  if (isLoading) return "Loading...";
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className=" w-full h-full  flex items-center mx-auto">
