@@ -4,7 +4,7 @@ import Loader from "@/components/Loader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const UpdateOrder = ({ params }) => {
@@ -19,6 +19,7 @@ const UpdateOrder = ({ params }) => {
         (res) => res.json()
       ),
   });
+  console.log(data);
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -43,6 +44,13 @@ const UpdateOrder = ({ params }) => {
     toast.success("Update succesfull!");
     router.push(`/dashboard/orders`);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      setStatus(data.status);
+    }
+  }, [isLoading]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -82,6 +90,7 @@ const UpdateOrder = ({ params }) => {
         <div>
           <input
             type="text"
+            value={status}
             placeholder="update status"
             className={`${styles.addProductInput} w-max`}
             onChange={(e) => setStatus(e.target.value)}

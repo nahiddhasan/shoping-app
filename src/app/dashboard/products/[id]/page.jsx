@@ -10,7 +10,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { toast } from "react-toastify";
@@ -196,6 +196,22 @@ const UpdateProduct = ({ params }) => {
     toast.success("Update succesfull!");
   };
 
+  useEffect(() => {
+    if (!isLoading) {
+      setTitle(data.title);
+      setDesc(data.desc);
+      setCatSlug(data.catSlug);
+      setStatus(data.status);
+      setColor(data.color);
+      setPrice(data.price);
+      setSize(data.size);
+      setIsFeatured(data.isFeatured);
+      setDisplayUrl(data.displayUrl);
+      setHoverUrl(data.hoverUrl);
+      setImgUrl(data.imgUrl);
+    }
+  }, [isLoading]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -216,6 +232,7 @@ const UpdateProduct = ({ params }) => {
           <label>Title:</label>
           <input
             type="text"
+            value={title}
             placeholder={data.title}
             className={styles.addProductInput}
             onChange={(e) => setTitle(setTitle(e.target.value))}
@@ -225,6 +242,7 @@ const UpdateProduct = ({ params }) => {
           <label>Desc:</label>
           <input
             type="text"
+            value={desc}
             placeholder={data.desc}
             className={styles.addProductInput}
             onChange={(e) => setDesc(e.target.value)}
@@ -234,6 +252,7 @@ const UpdateProduct = ({ params }) => {
           <label>Color:</label>
           <input
             type="text"
+            value={color}
             placeholder={data.color && data.color.map((i) => i)}
             className={styles.addProductInput}
             onChange={handleColor}
@@ -243,6 +262,7 @@ const UpdateProduct = ({ params }) => {
           <label>Size:</label>
           <input
             type="text"
+            value={size}
             placeholder={data.size && data.size.map((i) => i)}
             className={styles.addProductInput}
             onChange={handleSize}
@@ -252,6 +272,7 @@ const UpdateProduct = ({ params }) => {
           <label>Price:</label>
           <input
             type="number"
+            value={price}
             placeholder={data.price}
             className={styles.addProductInput}
             onChange={(e) => setPrice(e.target.value)}
@@ -261,6 +282,7 @@ const UpdateProduct = ({ params }) => {
           <label>Category:</label>
           <input
             type="text"
+            value={catSlug}
             placeholder={data.catSlug}
             className={styles.addProductInput}
             onChange={(e) => setCatSlug(e.target.value)}
@@ -270,6 +292,7 @@ const UpdateProduct = ({ params }) => {
           <label>Status:</label>
           <input
             type="text"
+            value={status}
             placeholder={data.status}
             className={styles.addProductInput}
             onChange={(e) => setStatus(e.target.value)}
